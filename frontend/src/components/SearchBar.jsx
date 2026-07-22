@@ -21,48 +21,30 @@ export default function SearchBar({ onSearch }) {
     onSearch({});
   }
 
+  const inputClass = "border border-slate-200 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition";
+
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-4 rounded-lg shadow-md mb-6 flex flex-wrap gap-3 items-end">
-      <div>
-        <label className="block text-xs text-slate-500 mb-1">Make</label>
-        <input
-          value={make}
-          onChange={(e) => setMake(e.target.value)}
-          className="border border-slate-300 rounded px-3 py-2 text-sm w-32"
-          placeholder="Toyota"
-        />
+    <form onSubmit={handleSubmit} className="bg-white border border-slate-100 rounded-xl shadow-sm p-4 mb-6 flex flex-wrap gap-3 items-end">
+      <div className="w-32">
+        <label className="block text-xs font-medium text-muted mb-1">Make</label>
+        <input value={make} onChange={(e) => setMake(e.target.value)} className={inputClass} placeholder="Toyota" />
       </div>
-      <div>
-        <label className="block text-xs text-slate-500 mb-1">Category</label>
-        <input
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="border border-slate-300 rounded px-3 py-2 text-sm w-32"
-          placeholder="Sedan"
-        />
+      <div className="w-32">
+        <label className="block text-xs font-medium text-muted mb-1">Category</label>
+        <input value={category} onChange={(e) => setCategory(e.target.value)} className={inputClass} placeholder="Sedan" />
       </div>
-      <div>
-        <label className="block text-xs text-slate-500 mb-1">Min Price</label>
-        <input
-          type="number"
-          value={minPrice}
-          onChange={(e) => setMinPrice(e.target.value)}
-          className="border border-slate-300 rounded px-3 py-2 text-sm w-28"
-        />
+      <div className="w-28">
+        <label className="block text-xs font-medium text-muted mb-1">Min Price</label>
+        <input type="number" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} className={inputClass} />
       </div>
-      <div>
-        <label className="block text-xs text-slate-500 mb-1">Max Price</label>
-        <input
-          type="number"
-          value={maxPrice}
-          onChange={(e) => setMaxPrice(e.target.value)}
-          className="border border-slate-300 rounded px-3 py-2 text-sm w-28"
-        />
+      <div className="w-28">
+        <label className="block text-xs font-medium text-muted mb-1">Max Price</label>
+        <input type="number" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} className={inputClass} />
       </div>
-      <button type="submit" className="bg-slate-800 text-white px-4 py-2 rounded text-sm hover:bg-slate-700">
+      <button type="submit" className="bg-accent text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-orange-700 transition">
         Search
       </button>
-      <button type="button" onClick={handleClear} className="text-sm text-slate-500 px-2">
+      <button type="button" onClick={handleClear} className="text-sm text-muted hover:text-navy px-2 transition">
         Clear
       </button>
     </form>
