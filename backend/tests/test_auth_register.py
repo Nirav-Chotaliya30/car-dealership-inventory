@@ -20,3 +20,15 @@ def test_register_new_user_returns_201():
     assert "id" in data
     assert "password" not in data
     assert "hashed_password" not in data
+
+def test_register_duplicate_email_returns_409():
+    client.post("/api/auth/register", json={
+        "email": "jane@example.com",
+        "password": "SecurePass123"
+    })
+    response = client.post("/api/auth/register", json={
+        "email": "jane@example.com",
+        "password": "AnotherPass456"
+    })
+    assert response.status_code == 409
+    assert "already registered" in response.json()["detail"].lower()
