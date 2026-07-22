@@ -64,6 +64,40 @@ def delete_vehicle(
     db.commit()
     return None
 
+@router.post("/{vehicle_id}/purchase", response_model=schemas.VehicleOut)
+def purchase_vehicle(
+    vehicle_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    vehicle = db.query(models.Vehicle).filter(models.Vehicle.id == vehicle_id).first()
+    if not vehicle:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Vehicle not found")
+
+    if vehicle.quantity <= 0:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Vehicle out of stock")
+
+    vehicle.quantity -= 1
+    db.commit()
+    db.refresh(vehicle)
+    return vehicle
+
+@router.post("/{vehicle_id}/restock", response_model=schemas.VehicleOut)
+def restock_vehicle(
+    vehicle_id: int,
+    restock: schemas.RestockRequest,
+    db: Session = Depends(get_db),
+    current_admin: models.User = Depends(get_current_admin_user),
+):
+    vehicle = db.query(models.Vehicle).filter(models.Vehicle.id == vehicle_id).first()
+    if not vehicle:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Vehicle not found")
+
+    vehicle.quantity += restock.amount
+    db.commit()
+    db.refresh(vehicle)
+    return vehicle
+
 @router.get("", response_model=List[schemas.VehicleOut])
 def list_vehicles(
     db: Session = Depends(get_db),

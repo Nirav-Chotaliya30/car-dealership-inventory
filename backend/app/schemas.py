@@ -38,3 +38,6 @@ class VehicleOut(BaseModel):
     quantity: int
 
 VehicleUpdate = VehicleCreate
+
+class RestockRequest(BaseModel):
+    amount: int
