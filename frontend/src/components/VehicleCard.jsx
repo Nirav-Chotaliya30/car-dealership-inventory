@@ -1,4 +1,4 @@
-export default function VehicleCard({ vehicle, isAdmin, onPurchase, onEdit, onDelete }) {
+export default function VehicleCard({ vehicle, isAdmin, onPurchase, onEdit, onDelete, onRestock }) {
   const outOfStock = vehicle.quantity <= 0;
 
   return (
@@ -20,7 +20,7 @@ export default function VehicleCard({ vehicle, isAdmin, onPurchase, onEdit, onDe
         {outOfStock ? "Out of stock" : `${vehicle.quantity} in stock`}
       </p>
 
-      <div className="mt-auto flex gap-2">
+      <div className="mt-auto flex flex-wrap gap-2">
         <button
           onClick={() => onPurchase(vehicle.id)}
           disabled={outOfStock}
@@ -36,6 +36,12 @@ export default function VehicleCard({ vehicle, isAdmin, onPurchase, onEdit, onDe
               className="px-3 py-2 border border-slate-300 rounded text-sm hover:bg-slate-50"
             >
               Edit
+            </button>
+            <button
+              onClick={() => onRestock(vehicle.id)}
+              className="px-3 py-2 border border-green-300 text-green-700 rounded text-sm hover:bg-green-50"
+            >
+              Restock
             </button>
             <button
               onClick={() => onDelete(vehicle.id)}

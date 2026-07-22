@@ -50,6 +50,24 @@ export default function Dashboard() {
     }
   }
 
+  async function handleRestock(id) {
+    const amount = prompt("How many units to add?");
+    if (!amount) return;
+
+    const parsed = Number(amount);
+    if (!Number.isInteger(parsed) || parsed <= 0) {
+        alert("Please enter a positive whole number.");
+        return;
+    }
+
+    try {
+        await api.restockVehicle(id, parsed);
+        loadVehicles();
+        } catch (err) {
+        setError(err.message);
+        }
+    }
+
   return (
     <div className="min-h-screen bg-slate-100 p-8">
       <div className="flex justify-between items-center mb-6">
@@ -88,6 +106,7 @@ export default function Dashboard() {
               onPurchase={handlePurchase}
               onEdit={(v) => navigate(`/vehicles/${v.id}/edit`)}
               onDelete={handleDelete}
+              onRestock={handleRestock}
             />
           ))}
         </div>
