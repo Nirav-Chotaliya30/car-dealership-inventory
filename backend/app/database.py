@@ -23,6 +23,7 @@ def ensure_tables_exist():
     global _tables_created
     if not _tables_created:
         try:
+            import app.models  # Registers User and Vehicle schemas on Base.metadata
             Base.metadata.create_all(bind=engine)
             _tables_created = True
             db = SessionLocal()
