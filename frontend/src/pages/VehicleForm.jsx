@@ -63,73 +63,40 @@ export default function VehicleForm() {
   }
 
   if (loading) {
-    return <div className="min-h-screen bg-slate-100 flex items-center justify-center">Loading...</div>;
+    return <div className="min-h-screen bg-canvas flex items-center justify-center text-muted">Loading...</div>;
   }
 
+  const inputClass = "w-full border border-slate-200 rounded-lg px-3 py-2.5 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition";
+
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center">
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h1 className="text-2xl font-bold text-slate-800 mb-6">
+    <div className="min-h-screen bg-canvas flex items-center justify-center px-4">
+      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 w-full max-w-sm">
+        <h1 className="font-display text-xl font-bold text-navy mb-6">
           {isEditMode ? "Edit Vehicle" : "Add Vehicle"}
         </h1>
 
-        {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
+        {error && <p className="text-stock-out text-sm mb-4 bg-red-50 px-3 py-2 rounded-lg">{error}</p>}
 
-        <label className="block text-sm text-slate-600 mb-1">Make</label>
-        <input
-          value={make}
-          onChange={(e) => setMake(e.target.value)}
-          className="w-full border border-slate-300 rounded px-3 py-2 mb-4"
-          required
-        />
+        <label className="block text-xs font-medium text-muted mb-1">Make</label>
+        <input value={make} onChange={(e) => setMake(e.target.value)} className={inputClass} required />
 
-        <label className="block text-sm text-slate-600 mb-1">Model</label>
-        <input
-          value={model}
-          onChange={(e) => setModel(e.target.value)}
-          className="w-full border border-slate-300 rounded px-3 py-2 mb-4"
-          required
-        />
+        <label className="block text-xs font-medium text-muted mb-1">Model</label>
+        <input value={model} onChange={(e) => setModel(e.target.value)} className={inputClass} required />
 
-        <label className="block text-sm text-slate-600 mb-1">Category</label>
-        <input
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="w-full border border-slate-300 rounded px-3 py-2 mb-4"
-          required
-        />
+        <label className="block text-xs font-medium text-muted mb-1">Category</label>
+        <input value={category} onChange={(e) => setCategory(e.target.value)} className={inputClass} required />
 
-        <label className="block text-sm text-slate-600 mb-1">Price</label>
-        <input
-          type="number"
-          step="0.01"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          className="w-full border border-slate-300 rounded px-3 py-2 mb-4"
-          required
-        />
+        <label className="block text-xs font-medium text-muted mb-1">Price</label>
+        <input type="number" step="0.01" value={price} onChange={(e) => setPrice(e.target.value)} className={inputClass} required />
 
-        <label className="block text-sm text-slate-600 mb-1">Quantity</label>
-        <input
-          type="number"
-          value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
-          className="w-full border border-slate-300 rounded px-3 py-2 mb-6"
-          required
-        />
+        <label className="block text-xs font-medium text-muted mb-1">Quantity</label>
+        <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} className={inputClass} required />
 
-        <div className="flex gap-3">
-          <button
-            type="submit"
-            className="flex-1 bg-slate-800 text-white py-2 rounded hover:bg-slate-700"
-          >
+        <div className="flex gap-3 mt-2">
+          <button type="submit" className="flex-1 bg-navy text-white py-2.5 rounded-lg font-medium hover:bg-slate-800 transition">
             {isEditMode ? "Save Changes" : "Add Vehicle"}
           </button>
-          <button
-            type="button"
-            onClick={() => navigate("/dashboard")}
-            className="px-4 py-2 border border-slate-300 rounded hover:bg-slate-50"
-          >
+          <button type="button" onClick={() => navigate("/dashboard")} className="px-4 py-2.5 border border-slate-200 rounded-lg text-muted hover:bg-slate-50 transition">
             Cancel
           </button>
         </div>
