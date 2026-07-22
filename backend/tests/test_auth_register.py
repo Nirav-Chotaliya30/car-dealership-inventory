@@ -32,3 +32,20 @@ def test_register_duplicate_email_returns_409():
     })
     assert response.status_code == 409
     assert "already registered" in response.json()["detail"].lower()
+
+def test_register_with_is_admin_true_creates_admin_user():
+    response = client.post("/api/auth/register", json={
+        "email": "admin@example.com",
+        "password": "AdminPass123",
+        "is_admin": True
+    })
+    assert response.status_code == 201
+    assert response.json()["is_admin"] is True
+
+def test_register_without_is_admin_defaults_to_false():
+    response = client.post("/api/auth/register", json={
+        "email": "regular@example.com",
+        "password": "RegularPass123"
+    })
+    assert response.status_code == 201
+    assert response.json()["is_admin"] is False
