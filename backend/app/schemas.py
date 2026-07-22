@@ -17,3 +17,20 @@ class UserLogin(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+
+class VehicleCreate(BaseModel):
+    make: str
+    model: str
+    category: str
+    price: float
+    quantity: int
+
+class VehicleOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    make: str
+    model: str
+    category: str
+    price: float
+    quantity: int

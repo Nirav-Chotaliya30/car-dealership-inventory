@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean,Float
 from app.database import Base
 
 class User(Base):
@@ -8,3 +8,13 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     is_admin = Column(Boolean, default=False)
+
+class Vehicle(Base):
+    __tablename__ = "vehicles"
+
+    id = Column(Integer, primary_key=True, index=True)
+    make = Column(String, nullable=False)
+    model = Column(String, nullable=False)
+    category = Column(String, nullable=False)
+    price = Column(Float, nullable=False)
+    quantity = Column(Integer, nullable=False, default=0)
