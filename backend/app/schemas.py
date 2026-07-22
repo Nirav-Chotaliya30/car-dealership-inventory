@@ -36,3 +36,5 @@ class VehicleOut(BaseModel):
     category: str
     price: float
     quantity: int
+
+VehicleUpdate = VehicleCreate

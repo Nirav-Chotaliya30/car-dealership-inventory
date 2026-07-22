@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends,status
+from fastapi import APIRouter, Depends,status,HTTPException
 from sqlalchemy.orm import Session
 from app import schemas,models
 from app.database import get_db
-from app.dependencies import get_current_user
+from app.dependencies import get_current_user,get_current_admin_user
 from typing import List,Optional
 
 router = APIRouter(prefix="/api/vehicles", tags=["vehicles"])
@@ -31,6 +31,38 @@ def search_vehicles(
         query = query.filter(models.Vehicle.price <= max_price)
 
     return query.all()
+
+@router.put("/{vehicle_id}", response_model=schemas.VehicleOut)
+def update_vehicle(
+    vehicle_id: int,
+    vehicle_update: schemas.VehicleUpdate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    vehicle = db.query(models.Vehicle).filter(models.Vehicle.id == vehicle_id).first()
+    if not vehicle:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Vehicle not found")
+
+    for field, value in vehicle_update.model_dump().items():
+        setattr(vehicle, field, value)
+
+    db.commit()
+    db.refresh(vehicle)
+    return vehicle
+
+@router.delete("/{vehicle_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_vehicle(
+    vehicle_id: int,
+    db: Session = Depends(get_db),
+    current_admin: models.User = Depends(get_current_admin_user),
+):
+    vehicle = db.query(models.Vehicle).filter(models.Vehicle.id == vehicle_id).first()
+    if not vehicle:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Vehicle not found")
+
+    db.delete(vehicle)
+    db.commit()
+    return None
 
 @router.get("", response_model=List[schemas.VehicleOut])
 def list_vehicles(
