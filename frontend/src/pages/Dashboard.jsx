@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { api } from "../api/client";
 import { useAuth } from "../context/AuthContext";
 import VehicleCard from "../components/VehicleCard";
@@ -6,6 +7,7 @@ import SearchBar from "../components/SearchBar";
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [vehicles, setVehicles] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -53,6 +55,14 @@ export default function Dashboard() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-slate-800">Vehicle Inventory</h1>
         <div className="flex items-center gap-4">
+          {user?.is_admin && (
+            <button
+              onClick={() => navigate("/vehicles/new")}
+              className="bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-700"
+            >
+              + Add Vehicle
+            </button>
+          )}
           <span className="text-sm text-slate-600">
             {user?.sub} {user?.is_admin ? "(Admin)" : ""}
           </span>
@@ -76,7 +86,7 @@ export default function Dashboard() {
               vehicle={vehicle}
               isAdmin={user?.is_admin}
               onPurchase={handlePurchase}
-              onEdit={() => alert("Edit form coming next!")}
+              onEdit={(v) => navigate(`/vehicles/${v.id}/edit`)}
               onDelete={handleDelete}
             />
           ))}
