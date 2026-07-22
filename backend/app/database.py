@@ -7,6 +7,10 @@ SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./dealership.db")
 if SQLALCHEMY_DATABASE_URL.startswith("postgres://"):
     SQLALCHEMY_DATABASE_URL = SQLALCHEMY_DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
+if SQLALCHEMY_DATABASE_URL.startswith("postgresql://") and "sslmode" not in SQLALCHEMY_DATABASE_URL:
+    delimiter = "&" if "?" in SQLALCHEMY_DATABASE_URL else "?"
+    SQLALCHEMY_DATABASE_URL += f"{delimiter}sslmode=require"
+
 connect_args = {"check_same_thread": False} if SQLALCHEMY_DATABASE_URL.startswith("sqlite") else {}
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args=connect_args)
