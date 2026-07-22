@@ -20,3 +20,16 @@ def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
     return new_user
+
+@router.post("/login", response_model=schemas.Token)
+def login(credentials: schemas.UserLogin, db: Session = Depends(get_db)):
+    user = db.query(models.User).filter(models.User.email == credentials.email).first()
+
+    if not user or not auth.verify_password(credentials.password, user.hashed_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+        )
+
+    token = auth.create_access_token(data={"sub": user.email})
+    return {"access_token": token, "token_type": "bearer"}
