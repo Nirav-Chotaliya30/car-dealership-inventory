@@ -54,3 +54,28 @@ def test_create_vehicle_without_auth_returns_401():
         },
     )
     assert response.status_code == 401
+
+def test_list_vehicles_returns_created_vehicles():
+    headers = _auth_headers()
+
+    client.post("/api/vehicles", headers=headers, json={
+        "make": "Toyota", "model": "Corolla", "category": "Sedan",
+        "price": 22000.00, "quantity": 5,
+    })
+    client.post("/api/vehicles", headers=headers, json={
+        "make": "Honda", "model": "Civic", "category": "Sedan",
+        "price": 24000.00, "quantity": 3,
+    })
+
+    response = client.get("/api/vehicles", headers=headers)
+
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data) == 2
+    makes = {v["make"] for v in data}
+    assert makes == {"Toyota", "Honda"}
+
+def test_list_vehicles_returns_empty_list_when_none_exist():
+    response = client.get("/api/vehicles", headers=_auth_headers())
+    assert response.status_code == 200
+    assert response.json() == []
