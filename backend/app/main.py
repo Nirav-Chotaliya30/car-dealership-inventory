@@ -6,7 +6,10 @@ import os
 from app.database import Base, engine, SessionLocal
 from app.models import Vehicle
 
-Base.metadata.create_all(bind=engine)
+try:
+    Base.metadata.create_all(bind=engine)
+except Exception as e:
+    print(f"Database initialization warning: {e}")
 
 def seed_initial_data():
     db = SessionLocal()
