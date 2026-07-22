@@ -32,5 +32,5 @@ def login(credentials: schemas.UserLogin, db: Session = Depends(get_db)):
             detail="Incorrect email or password",
         )
 
-    token = auth.create_access_token(data={"sub": user.email})
+    token = auth.create_access_token(data={"sub": user.email, "is_admin": user.is_admin})
     return {"access_token": token, "token_type": "bearer"}
